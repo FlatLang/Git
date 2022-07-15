@@ -1,0 +1,21 @@
+{
+  "name": "Git",
+  "version": "0.1.0",
+  "description": "Flat Git Client",
+  "author": "Braden Steffaniak",
+  "license": "ISC",
+  "scripts": {},
+  "main": {
+    "source": "src",
+    "dependencies": {
+      "github:FlatLang/System": "master"
+    }
+  },
+  "test": {
+    "mainClass": "flatlang/git/Git_TestSuite",
+    "source": "src",
+    "dependencies": {
+      "github:FlatLang/Nest": "master"
+    }
+  }
+}

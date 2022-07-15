@@ -1,0 +1,62 @@
+package "flatlang/git"
+
+import "flatlang/system/ExecutionResponse"
+
+class {
+  public static async clone(
+    String url,
+    Int: depth = 0,
+    String: outputDirectory = null,
+    String: branch = null,
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> ExecutionResponse {
+    let args = [
+      "git",
+      "clone",
+      url
+    ]
+
+    if (depth > 0) {
+      args.addAll(["--depth", "#depth"])
+    }
+
+    if (branch) {
+      args.addAll(["--branch", branch])
+    }
+
+    if (outputDirectory) {
+      args.add(outputDirectory)
+    }
+
+    return await System.execute(args, workingDirectory, silent: silent)
+  }
+
+  public static async getConfigValue(
+    String configValue,
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> String => null {
+    let response = await System.execute(
+      ["git", "config", "--get", configValue],
+      workingDirectory,
+      silent: silent
+    )
+
+    if (response.exitCode == 0) {
+      return response.stdout.first?.trim()
+    } else {
+      throw new GitCommandException("git config failed", response)
+    }
+  }
+
+  public static async getOriginUrl(
+    String workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) =>
+    await getConfigValue(
+      "remote.origin.url",
+      workingDirectory: workingDirectory,
+      silent: silent
+    )
+}
