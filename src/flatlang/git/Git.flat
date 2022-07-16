@@ -29,7 +29,7 @@ class {
       args.add(outputDirectory)
     }
 
-    return await System.execute(args, workingDirectory, silent: silent)
+    return await System.execute(args, workingDirectory, silent)
   }
 
   public static async getConfigValue(
@@ -56,7 +56,7 @@ class {
   ) =>
     await getConfigValue(
       "remote.origin.url",
-      workingDirectory: workingDirectory,
-      silent: silent
+      workingDirectory,
+      silent
     )
 }
