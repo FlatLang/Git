@@ -3,6 +3,25 @@ package "flatlang/git"
 import "flatlang/system/ExecutionResponse"
 
 class {
+  public construct(
+    visible String workingDirectory = System.workingDirectory
+  ) {}
+
+  public async clone(
+    String url,
+    Int: depth = 0,
+    String: outputDirectory = null,
+    String: branch = null,
+    Bool: silent = false
+  ) => await Git.clone(
+    url,
+    depth,
+    outputDirectory,
+    branch,
+    workingDirectory,
+    silent
+  )
+
   public static async clone(
     String url,
     Int: depth = 0,
@@ -32,11 +51,94 @@ class {
     return await System.execute(args, workingDirectory, silent)
   }
 
+  public async checkout(
+    String ref,
+    Bool: createBranch = false,
+    Bool: silent = false
+  ) => await Git.checkout(
+    ref,
+    workingDirectory,
+    createBranch,
+    silent
+  )
+
+  public static async checkout(
+    String ref,
+    String: workingDirectory = System.workingDirectory,
+    Bool: createBranch = false,
+    Bool: silent = false
+  ) -> ExecutionResponse {
+    let args = [
+      "git",
+      "checkout"
+    ]
+
+    if (createBranch) {
+      args.add("-b")
+    }
+
+    args.add(ref)
+
+    return await System.execute(args, workingDirectory, silent)
+  }
+
+  public class PullResponse {
+    construct(
+      visible Bool: upToDate,
+      visible Bool: success,
+      visible ExecutionResponse: executionResponse
+    ) {}
+  }
+
+  public async pull(
+    Bool: silent = false
+  ) => await Git.pull(
+    workingDirectory,
+    silent
+  )
+
+  public static async pull(
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> PullResponse {
+    let args = [
+      "git",
+      "pull"
+    ]
+
+    let executionResponse = await System.execute(args, workingDirectory, silent)
+    let success = executionResponse.exitCode == 0
+    let upToDate = success && executionResponse.stdout.first?.trim() == "Already up to date."
+
+    return new PullResponse(
+      upToDate,
+      success,
+      executionResponse
+    )
+  }
+
+  public class GetConfigValueResponse {
+    construct(
+      visible String: value,
+      visible Bool: success,
+      visible ExecutionResponse: executionResponse
+    ) {}
+  }
+
+  public async getConfigValue(
+    String configValue,
+    Bool: silent = false
+  ) => await Git.getConfigValue(
+    configValue,
+    workingDirectory,
+    silent
+  )
+
   public static async getConfigValue(
     String configValue,
     String: workingDirectory = System.workingDirectory,
     Bool: silent = false
-  ) -> String => null {
+  ) -> GetConfigValueResponse => null {
     let response = await System.execute(
       ["git", "config", "--get", configValue],
       workingDirectory,
@@ -44,19 +146,50 @@ class {
     )
 
     if (response.exitCode == 0) {
-      return response.stdout.first?.trim()
+      return new GetConfigValueResponse(
+        value: response.stdout.first?.trim(),
+        success: response.exitCode == 0,
+        executionResponse: response
+      )
     } else {
       throw new GitCommandException("git config failed", response)
     }
   }
 
+  public class GetOriginUrlResponse extends GetConfigValueResponse {
+    construct(GetConfigValueResponse response) {
+      this(
+        value: response.value,
+        success: response.success,
+        executionResponse: response.executionResponse
+      )
+    }
+
+    construct(
+      String: value,
+      Bool: success,
+      ExecutionResponse: executionResponse
+    ) {
+      super(value, success, executionResponse)
+    }
+  }
+
+  public async getOriginUrl(
+    Bool: silent = false
+  ) => await Git.getOriginUrl(
+    workingDirectory,
+    silent
+  )
+
   public static async getOriginUrl(
     String workingDirectory = System.workingDirectory,
     Bool: silent = false
   ) =>
-    await getConfigValue(
-      "remote.origin.url",
-      workingDirectory,
-      silent
+    new GetOriginUrlResponse(
+      await getConfigValue(
+        "remote.origin.url",
+        workingDirectory,
+        silent
+      )
     )
 }
