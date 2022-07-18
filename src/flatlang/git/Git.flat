@@ -13,7 +13,7 @@ class {
     String: outputDirectory = null,
     String: branch = null,
     Bool: silent = false
-  ) => await Git.clone(
+  ) => Git.clone(
     url,
     depth,
     outputDirectory,
@@ -48,14 +48,14 @@ class {
       args.add(outputDirectory)
     }
 
-    return await System.execute(args, workingDirectory, silent)
+    return System.execute(args, workingDirectory, silent)
   }
 
   public async checkout(
     String ref,
     Bool: createBranch = false,
     Bool: silent = false
-  ) => await Git.checkout(
+  ) => Git.checkout(
     ref,
     workingDirectory,
     createBranch,
@@ -79,7 +79,7 @@ class {
 
     args.add(ref)
 
-    return await System.execute(args, workingDirectory, silent)
+    return System.execute(args, workingDirectory, silent)
   }
 
   public class PullResponse {
@@ -92,7 +92,7 @@ class {
 
   public async pull(
     Bool: silent = false
-  ) => await Git.pull(
+  ) => Git.pull(
     workingDirectory,
     silent
   )
@@ -106,7 +106,7 @@ class {
       "pull"
     ]
 
-    let executionResponse = await System.execute(args, workingDirectory, silent)
+    let executionResponse = System.execute(args, workingDirectory, silent)
     let success = executionResponse.exitCode == 0
     let upToDate = success && executionResponse.stdout.first?.trim() == "Already up to date."
 
@@ -128,7 +128,7 @@ class {
   public async getConfigValue(
     String configValue,
     Bool: silent = false
-  ) => await Git.getConfigValue(
+  ) => Git.getConfigValue(
     configValue,
     workingDirectory,
     silent
@@ -139,7 +139,7 @@ class {
     String: workingDirectory = System.workingDirectory,
     Bool: silent = false
   ) -> GetConfigValueResponse => null {
-    let response = await System.execute(
+    let response = System.execute(
       ["git", "config", "--get", configValue],
       workingDirectory,
       silent: silent
@@ -176,7 +176,7 @@ class {
 
   public async getOriginUrl(
     Bool: silent = false
-  ) => await Git.getOriginUrl(
+  ) => Git.getOriginUrl(
     workingDirectory,
     silent
   )
@@ -186,7 +186,7 @@ class {
     Bool: silent = false
   ) =>
     new GetOriginUrlResponse(
-      await getConfigValue(
+      getConfigValue(
         "remote.origin.url",
         workingDirectory,
         silent
