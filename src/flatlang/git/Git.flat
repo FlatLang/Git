@@ -110,7 +110,7 @@ class {
     let success = executionResponse.exitCode == 0
     let upToDate = success && executionResponse.stdout.first?.trim() == "Already up to date."
 
-    return new PullResponse(
+    return PullResponse(
       upToDate,
       success,
       executionResponse
@@ -146,13 +146,13 @@ class {
     )
 
     if (response.exitCode == 0) {
-      return new GetConfigValueResponse(
+      return GetConfigValueResponse(
         value: response.stdout.first?.trim(),
         success: response.exitCode == 0,
         executionResponse: response
       )
     } else {
-      throw new GitCommandException("git config failed", response)
+      throw GitCommandException("git config failed", response)
     }
   }
 
@@ -185,7 +185,7 @@ class {
     String workingDirectory = System.workingDirectory,
     Bool: silent = false
   ) =>
-    new GetOriginUrlResponse(
+    GetOriginUrlResponse(
       getConfigValue(
         "remote.origin.url",
         workingDirectory,
