@@ -1,6 +1,6 @@
-package "flatlang/git"
+package flatlang/git
 
-import "flatlang/system/ExecutionResponse"
+import flatlang/system/ExecutionResponse
 
 class {
   public construct(
