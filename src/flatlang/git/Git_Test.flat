@@ -1,0 +1,11 @@
+package flatlang/git
+
+import flatlang/git/Git
+
+testable class {
+  test `can create`() {
+    let value = Git()
+
+    expect(value).toNotBe(null)
+  }
+}
