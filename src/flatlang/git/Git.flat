@@ -7,6 +7,29 @@ class {
     visible String workingDirectory = System.workingDirectory
   ) {}
 
+  public async lsRemote(
+    String url,
+    Bool: silent = false
+  ) => Git.lsRemote(
+    url,
+    workingDirectory,
+    silent
+  )
+
+  public static async lsRemote(
+    String url,
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> ExecutionResponse {
+    let args = [
+      "git",
+      "ls-remote",
+      url
+    ]
+
+    return System.execute(args, workingDirectory, silent)
+  }
+
   public async clone(
     String url,
     Int: depth = 0,
