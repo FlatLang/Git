@@ -144,15 +144,26 @@ class {
       "pull"
     ]
 
-    let executionResponse = System.execute(args, workingDirectory, silent)
-    let success = executionResponse.exitCode == 0
-    let upToDate = success && executionResponse.stdout.first?.trim() == "Already up to date."
+    try {
+      let executionResponse = System.execute(args, workingDirectory, silent)
+      let success = executionResponse.exitCode == 0
+      let upToDate = success && (
+        executionResponse.stdout.first?.trim() == "Already up to date." ||
+        executionResponse.stdout.first?.trim().endsWith("is up to date.")
+      )
 
-    return PullResponse(
-      upToDate,
-      success,
-      executionResponse
-    )
+      return PullResponse(
+        upToDate,
+        success,
+        executionResponse
+      )
+    } catch (Exception e) {
+      return PullResponse(
+        upToDate: false,
+        success: false,
+        executionResponse: null
+      )
+    }
   }
 
   public class GetConfigValueResponse {
