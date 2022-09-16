@@ -1,10 +1,17 @@
 package flatlang/git
 
+import flatlang/io/File
 import flatlang/system/ExecutionResponse
 
 class {
   public construct(
-    visible String workingDirectory = System.workingDirectory
+    String workingDirectory = System.workingDirectory
+  ) {
+    this(File(workingDirectory))
+  }
+
+  public construct(
+    visible File workingDirectory
   ) {}
 
   public async lsRemote(
@@ -12,7 +19,7 @@ class {
     Bool: silent = false
   ) => Git.lsRemote(
     url,
-    workingDirectory,
+    workingDirectory: workingDirectory.location,
     silent
   )
 
@@ -41,7 +48,7 @@ class {
     depth,
     outputDirectory,
     branch,
-    workingDirectory,
+    workingDirectory: workingDirectory.location,
     silent
   )
 
@@ -80,7 +87,7 @@ class {
     Bool: silent = false
   ) => Git.checkout(
     ref,
-    workingDirectory,
+    workingDirectory: workingDirectory.location,
     createBranch,
     silent
   )
@@ -111,12 +118,20 @@ class {
       visible Bool: success,
       visible ExecutionResponse: executionResponse
     ) {}
+
+    override public toString() => "|
+      {
+        upToDate: #{upToDate},
+        success: #{success},
+        executionResponse: #{executionResponse}
+      }
+      |"
   }
 
   public async pull(
     Bool: silent = false
   ) => Git.pull(
-    workingDirectory,
+    workingDirectory: workingDirectory.location,
     silent
   )
 
@@ -153,7 +168,7 @@ class {
     Bool: silent = false
   ) => Git.getConfigValue(
     configValue,
-    workingDirectory,
+    workingDirectory: workingDirectory.location,
     silent
   )
 
@@ -200,7 +215,7 @@ class {
   public async getOriginUrl(
     Bool: silent = false
   ) => Git.getOriginUrl(
-    workingDirectory,
+    workingDirectory: workingDirectory.location,
     silent
   )
 
@@ -211,7 +226,7 @@ class {
     GetOriginUrlResponse(
       getConfigValue(
         "remote.origin.url",
-        workingDirectory,
+        workingDirectory: workingDirectory,
         silent
       )
     )
