@@ -1,6 +1,6 @@
-package flatlang/git
+package flat/git
 
-import flatlang/git/Git
+import flat/git/Git
 
 testable class {
   test `can create`() {

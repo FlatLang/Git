@@ -1,6 +1,6 @@
-package flatlang/git
+package flat/git
 
-import flatlang/system/ExecutionResponse
+import flat/system/ExecutionResponse
 
 class extends Exception {
   public construct(String message, visible ExecutionResponse response) => super(message)
