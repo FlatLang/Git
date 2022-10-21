@@ -112,7 +112,7 @@ class {
     return System.execute(args, workingDirectory, silent)
   }
 
-  public class PullResponse {
+  class PullResponse {
     construct(
       visible Bool: upToDate,
       visible Bool: success,
@@ -166,7 +166,7 @@ class {
     }
   }
 
-  public class GetConfigValueResponse {
+  class GetConfigValueResponse {
     construct(
       visible String: value,
       visible Bool: success,
@@ -205,7 +205,7 @@ class {
     }
   }
 
-  public class GetOriginUrlResponse extends GetConfigValueResponse {
+  class GetOriginUrlResponse extends GetConfigValueResponse {
     construct(GetConfigValueResponse response) {
       this(
         value: response.value,
