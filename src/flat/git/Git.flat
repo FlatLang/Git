@@ -166,6 +166,38 @@ class {
     }
   }
 
+  class StatusResponse {
+    construct(
+      visible Bool: nothingToCommit,
+      visible Bool: clean,
+      visible String: value,
+      visible Bool: success,
+      visible ExecutionResponse: executionResponse
+    ) {}
+  }
+
+  public static async status(
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> StatusResponse => null {
+    let response = System.execute(
+      ["git", "status"],
+      workingDirectory,
+      silent: silent
+    )
+
+    let success = response.exitCode == 0
+    let nothingToCommit = success && response.stdout.last?.trim()?.contains("nothing to commit")
+    let clean = nothingToCommit && response.stdout.last?.trim()?.endsWith("nothing to commit, working tree clean")
+    return StatusResponse(
+      nothingToCommit: nothingToCommit,
+      clean: clean,
+      value: response.stdout.join("\n"),
+      success: success,
+      executionResponse: response
+    )
+  }
+
   class GetConfigValueResponse {
     construct(
       visible String: value,
