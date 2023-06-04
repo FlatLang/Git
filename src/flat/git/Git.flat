@@ -138,6 +138,34 @@ class {
     return System.execute(args, workingDirectory, silent)
   }
 
+  public async pushTags(
+    String: remote = null,
+    Bool: silent = false
+  ) => Git.pushTags(
+    remote,
+    workingDirectory: workingDirectory.location,
+    silent
+  )
+
+  public static async pushTags(
+    String: remote = null,
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> ExecutionResponse {
+    let args = [
+      "git",
+      "push",
+    ]
+
+    if (remote) {
+        args.add(remote)
+    }
+
+    args.add("--tags")
+
+    return System.execute(args, workingDirectory, silent)
+  }
+
   public async push(
     String: branch = null,
     String: remote = "origin",
