@@ -37,6 +37,29 @@ class {
     return System.execute(args, workingDirectory, silent)
   }
 
+  public async add(
+    String file,
+    Bool: silent = false
+  ) => Git.add(
+    file,
+    workingDirectory: workingDirectory.location,
+    silent
+  )
+
+  public static async add(
+    String file,
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> ExecutionResponse {
+    let args = [
+      "git",
+      "add",
+      file
+    ]
+
+    return System.execute(args, workingDirectory, silent)
+  }
+
   public async clone(
     String url,
     Int: depth = 0,
