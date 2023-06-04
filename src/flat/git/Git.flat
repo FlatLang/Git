@@ -138,6 +138,35 @@ class {
     return System.execute(args, workingDirectory, silent)
   }
 
+  public async push(
+    String: branch = null,
+    String: remote = "origin",
+    Bool: silent = false
+  ) => Git.push(
+    branch,
+    remote,
+    workingDirectory: workingDirectory.location,
+    silent
+  )
+
+  public static async push(
+    String: branch = null,
+    String: remote = "origin",
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> ExecutionResponse {
+    let args = [
+      "git",
+      "push",
+    ]
+
+    if (branch) {
+        args.addAll([remote, branch])
+    }
+
+    return System.execute(args, workingDirectory, silent)
+  }
+
   public async clone(
     String url,
     Int: depth = 0,
