@@ -83,6 +83,30 @@ class {
     return System.execute(args, workingDirectory, silent)
   }
 
+  public async deleteTag(
+    String tagName,
+    Bool: silent = false
+  ) => Git.deleteTag(
+    tagName,
+    workingDirectory: workingDirectory.location,
+    silent
+  )
+
+  public static async deleteTag(
+    String tagName,
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> ExecutionResponse {
+    let args = [
+      "git",
+      "tag",
+      "-d",
+      tagName
+    ]
+
+    return System.execute(args, workingDirectory, silent)
+  }
+
   public async clone(
     String url,
     Int: depth = 0,
