@@ -60,6 +60,29 @@ class {
     return System.execute(args, workingDirectory, silent)
   }
 
+  public async tag(
+    String tagName,
+    Bool: silent = false
+  ) => Git.tag(
+    tagName,
+    workingDirectory: workingDirectory.location,
+    silent
+  )
+
+  public static async tag(
+    String tagName,
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> ExecutionResponse {
+    let args = [
+      "git",
+      "tag",
+      tagName
+    ]
+
+    return System.execute(args, workingDirectory, silent)
+  }
+
   public async clone(
     String url,
     Int: depth = 0,
