@@ -107,6 +107,37 @@ class {
     return System.execute(args, workingDirectory, silent)
   }
 
+  public async commit(
+    String message,
+    Bool: amend = false,
+    Bool: silent = false
+  ) => Git.commit(
+    message,
+    amend,
+    workingDirectory: workingDirectory.location,
+    silent
+  )
+
+  public static async commit(
+    String message,
+    Bool: amend = false,
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> ExecutionResponse {
+    let args = [
+      "git",
+      "commit",
+      "-m",
+      message
+    ]
+
+    if (amend) {
+      args.add("--amend")
+    }
+
+    return System.execute(args, workingDirectory, silent)
+  }
+
   public async clone(
     String url,
     Int: depth = 0,
