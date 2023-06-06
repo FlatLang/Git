@@ -1,7 +1,5 @@
 package flat/git
 
-import flat/git/Git
-
 testable class {
     test `can create`() {
         let value = Git()
