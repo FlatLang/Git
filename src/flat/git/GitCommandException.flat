@@ -3,5 +3,5 @@ package flat/git
 import flat/system/ExecutionResponse
 
 class extends Exception {
-  public construct(String message, visible ExecutionResponse response) => super(message)
+    public construct(String message, visible ExecutionResponse response) => super(message)
 }
