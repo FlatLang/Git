@@ -383,6 +383,44 @@ class {
     )
   }
 
+  data class RemoteInfoResponse {
+    visible String remote
+    visible String fetchUrl
+    visible String pushUrl
+    visible String headBranch
+    visible Bool success
+    visible ExecutionResponse executionResponse
+  }
+
+  public static async remoteInfo(
+    String remoteUrl,
+    String: workingDirectory = System.workingDirectory,
+    Bool: silent = false
+  ) -> RemoteInfoResponse => null {
+    let response = System.execute(
+      ["git", "remote", "show", remoteUrl],
+      workingDirectory,
+      silent: silent
+    )
+
+    let success = response.exitCode == 0
+
+    let allInfo = response.stdout.firstWhere({ _x.startsWith("* remote") }).split("\n  ")
+    let remote = allInfo[0].substring("* remote ".count)
+    let fetchUrl = allInfo[1].substring("Fetch Url: ".count)
+    let pushUrl = allInfo[2].substring("Push  Url: ".count)
+    let headBranch = allInfo[3].substring("HEAD branch: ".count)
+
+    return RemoteInfoResponse(
+      remote: remote,
+      fetchUrl: fetchUrl,
+      pushUrl: pushUrl,
+      headBranch: headBranch,
+      success: success,
+      executionResponse: response
+    )
+  }
+
   class GetConfigValueResponse {
     construct(
       visible String: value,
