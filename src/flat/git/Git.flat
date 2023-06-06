@@ -392,6 +392,15 @@ class {
         visible ExecutionResponse executionResponse
     }
 
+    public async remoteInfo(
+        String remoteUrl,
+        Bool: silent = false
+    ) => Git.remoteInfo(
+        remoteUrl,
+        workingDirectory: workingDirectory.location,
+        silent
+    )
+
     public static async remoteInfo(
         String remoteUrl,
         String: workingDirectory = System.workingDirectory,
