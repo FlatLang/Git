@@ -266,6 +266,39 @@ class {
         return System.execute(args, workingDirectory, silent)
     }
 
+    public async fetch(
+        String: origin = "origin",
+        String: ref = null,
+        Int: depth = 0,
+        Bool: silent = false
+    ) => Git.fetch(
+        origin,
+        ref,
+        depth,
+        workingDirectory: workingDirectory.location,
+        silent
+    )
+
+    public static async fetch(
+        String: origin = "origin",
+        String: ref = null,
+        Int: depth = 0,
+        String: workingDirectory = System.workingDirectory,
+        Bool: silent = false
+    ) -> ExecutionResponse {
+        let args = [
+            "git",
+            "fetch",
+            origin,
+        ]
+
+        if (ref) args.add(ref)
+
+        args.addAll(["--depth", depth])
+
+        return System.execute(args, workingDirectory, silent)
+    }
+
     public async checkout(
         String ref,
         Bool: createBranch = false,
