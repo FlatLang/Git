@@ -103,6 +103,35 @@ class {
         return System.execute(args, workingDirectory, silent).stdout.last.trimEnd()
     }
 
+    public async revParse(
+        String ref,
+        Bool: verify = false,
+        Bool: silent = true
+    ) => Git.revParse(
+        ref,
+        verify,
+        workingDirectory: workingDirectory.location,
+        silent
+    )
+
+    public static async revParse(
+        String ref,
+        Bool: verify = false,
+        String: workingDirectory = System.workingDirectory,
+        Bool: silent = true
+    ) -> String {
+        let args = [
+            "git",
+            "rev-parse",
+        ]
+
+        if (verify) args.add("--verify")
+
+        args.add(ref)
+
+        return System.execute(args, workingDirectory, silent).stdout.last.trimEnd()
+    }
+
     public async deleteTag(
         String tagName,
         Bool: silent = false
