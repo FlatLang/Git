@@ -83,6 +83,26 @@ class {
         return System.execute(args, workingDirectory, silent)
     }
 
+    public async getCurrentBranch(
+        Bool: silent = true
+    ) => Git.getCurrentBranch(
+        workingDirectory: workingDirectory.location,
+        silent
+    )
+
+    public static async getCurrentBranch(
+        String: workingDirectory = System.workingDirectory,
+        Bool: silent = true
+    ) -> String {
+        let args = [
+            "git",
+            "branch",
+            "--show-current",
+        ]
+
+        return System.execute(args, workingDirectory, silent).stdout.last.trimEnd()
+    }
+
     public async deleteTag(
         String tagName,
         Bool: silent = false
