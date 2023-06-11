@@ -343,7 +343,7 @@ class {
 
         if (ref) args.add(ref)
 
-        args.addAll(["--depth", depth])
+        args.addAll(["--depth", depth.toString()])
 
         return System.execute(args, workingDirectory, silent)
     }
