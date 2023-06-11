@@ -540,7 +540,7 @@ class {
 
         let success = response.exitCode == 0
 
-        let tags = response.stdout.last
+        let tags = response.stdout.join()
             .split("\n")
             .filter({ _.count > 40 })
             .map({ Tag(_x.substring(end: 40), _x.substring(_x.lastIndexOf([' ', '\t']) + 1)) })
