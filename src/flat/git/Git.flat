@@ -443,6 +443,13 @@ class {
         ) {}
     }
 
+    public async status(
+        Bool: silent = false
+    ) => Git.status(
+        workingDirectory: workingDirectory.location,
+        silent: silent
+    )
+
     public static async status(
         String: workingDirectory = System.workingDirectory,
         Bool: silent = false
