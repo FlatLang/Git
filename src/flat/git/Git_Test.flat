@@ -19,8 +19,9 @@ testable class {
 
     async test `can fetch remote tags`() {
         let info = Git.lsRemoteTags(silent: true)
+        let tags = info.tags.filter({ _.name.startsWith("test-tag") })
 
-        expect(info.tags).toBe([
+        expect(tags).toBe([
             Tag("4a4c4c275b32cfb296ef5a31ae3b2ac31a779b2c", "refs/tags/test-tag-1"),
             Tag("4a4c4c275b32cfb296ef5a31ae3b2ac31a779b2c", "refs/tags/test-tag-2"),
         ])
