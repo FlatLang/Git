@@ -132,6 +132,30 @@ class {
         return System.execute(args, workingDirectory, silent).stdout.last.trimEnd()
     }
 
+    public async cherry(
+        Bool v = false,
+        Bool: silent = false
+    ) => Git.cherry(
+        v,
+        workingDirectory: workingDirectory.location,
+        silent
+    )
+
+    public static async cherry(
+        Bool v = false,
+        String: workingDirectory = System.workingDirectory,
+        Bool: silent = false
+    ) -> ExecutionResponse {
+        let args = [
+            "git",
+            "cherry",
+        ]
+
+        if (v) args.add("-v")
+
+        return System.execute(args, workingDirectory, silent)
+    }
+
     public async deleteTag(
         String tagName,
         Bool: silent = false
