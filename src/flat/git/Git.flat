@@ -156,6 +156,34 @@ class {
         return System.execute(args, workingDirectory, silent)
     }
 
+    public async show(
+        String format = null,
+        Bool noPatch = false,
+        Bool: silent = false
+    ) => Git.show(
+        format,
+        noPatch,
+        workingDirectory: workingDirectory.location,
+        silent
+    )
+
+    public static async show(
+        String format = null,
+        Bool noPatch = false,
+        String: workingDirectory = System.workingDirectory,
+        Bool: silent = false
+    ) -> ExecutionResponse {
+        let args = [
+            "git",
+            "show",
+        ]
+
+        if (format != null) args.add("--format=#{format}")
+        if (noPatch) args.add("-s")
+
+        return System.execute(args, workingDirectory, silent)
+    }
+
     public async deleteTag(
         String tagName,
         Bool: silent = false
