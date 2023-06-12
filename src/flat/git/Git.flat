@@ -643,6 +643,46 @@ class {
         )
     }
 
+    public async showRef(
+        Bool tags = false,
+        Bool: silent = false
+    ) => Git.showRef(
+        tags,
+        workingDirectory: workingDirectory.location,
+        silent
+    )
+
+    public static async showRef(
+        Bool tags = false,
+        String: workingDirectory = System.workingDirectory,
+        Bool: silent = false
+    ) -> LsTagsResponse {
+        let args = [
+            "git",
+            "show-ref",
+        ]
+
+        if (tags) args.add("--tags")
+
+        let response = System.execute(args, workingDirectory, silent)
+
+        let success = response.exitCode == 0
+
+        let lines = response.stdout.join()
+            .split("\n")
+            .filter({ _.count > 45 })
+
+        let tagsList = lines.stream()
+            .filter({ _x.startsWith("refs/tags/", start: _x.indexOf([' ', '\t'], start: 41, invert: true)) })
+            .map({ Tag(_x.substring(end: 40), _x.substring(_x.indexOf([' ', '\t'], start: 41, invert: true))) })
+
+        return LsTagsResponse(
+            tags: tagsList.toArray(),
+            success: success,
+            executionResponse: response
+        )
+    }
+
     class GetConfigValueResponse {
         construct(
             visible String: value,
