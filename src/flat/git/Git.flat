@@ -184,6 +184,38 @@ class {
         return System.execute(args, workingDirectory, silent)
     }
 
+    public async log(
+        Int count = 0,
+        String pretty = null,
+        Bool oneline = false,
+        Bool: silent = false
+    ) => Git.log(
+        count,
+        pretty,
+        oneline,
+        workingDirectory: workingDirectory.location,
+        silent
+    )
+
+    public static async log(
+        Int count = 0,
+        String pretty = null,
+        Bool oneline = false,
+        String: workingDirectory = System.workingDirectory,
+        Bool: silent = false
+    ) -> ExecutionResponse {
+        let args = [
+            "git",
+            "log",
+        ]
+
+        if (count > 0) args.add("-#{count}")
+        if (pretty != null) args.add("--pretty=#{pretty}")
+        if (oneline) args.add("--oneline")
+
+        return System.execute(args, workingDirectory, silent)
+    }
+
     public async deleteTag(
         String tagName,
         Bool: silent = false
